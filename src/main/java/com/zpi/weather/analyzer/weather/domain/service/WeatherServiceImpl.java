@@ -44,8 +44,8 @@ public class WeatherServiceImpl implements WeatherService {
     }
 
     @Override
-    public List<WeatherDto> getWeatherInformation(String numberOfPage, String sortBy) {
-        Pageable pageable = PageRequest.of(Integer.parseInt(numberOfPage), 20, Sort.by(sortBy));
+    public List<WeatherDto> getWeatherInformation(String numberOfPage, String size, String sortBy) {
+        Pageable pageable = PageRequest.of(Integer.parseInt(numberOfPage), Integer.parseInt(size), Sort.by(sortBy));
         List<WeatherEntity> content = weatherRepository.findAll(pageable).getContent();
         return content.stream().map(weatherEntity ->  WeatherDto.builder()
                 .date(weatherEntity.getDate().getDate())

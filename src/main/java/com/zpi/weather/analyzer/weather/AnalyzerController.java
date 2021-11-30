@@ -26,8 +26,8 @@ public class AnalyzerController {
     }
 
     @GetMapping("/information")
-    public ResponseEntity<List<WeatherDto>> getInformationAboutWeather(@RequestParam String numberOfPage, @RequestParam String sortBy) {
-        return ResponseEntity.ok(weatherService.getWeatherInformation(numberOfPage, sortBy));
+    public ResponseEntity<List<WeatherDto>> getInformationAboutWeather(@RequestParam String numberOfPage, @RequestParam String size, @RequestParam String sortBy) {
+        return ResponseEntity.ok(weatherService.getWeatherInformation(numberOfPage, size, sortBy));
     }
 
     @PostMapping("/information")

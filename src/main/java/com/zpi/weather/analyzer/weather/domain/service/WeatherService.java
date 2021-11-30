@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface WeatherService {
     WeatherEntity createWeatherEntry(WeatherBasicDto weatherDto);
-    List<WeatherDto> getWeatherInformation(String numberOfPage, String sortBy);
+    List<WeatherDto> getWeatherInformation(String numberOfPage, String size, String sortBy);
 }
