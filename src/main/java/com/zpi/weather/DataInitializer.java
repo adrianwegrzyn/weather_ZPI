@@ -29,32 +29,32 @@ public class DataInitializer implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        Files.lines(Path.of(inputFilesPath + "weather_station.csv")).forEach(line -> {
-                    String[] split = line.split(";");
-                    weatherStationRepository.save(WeatherStationEntity.builder()
-                            .name(split[0])
-                            .code(split[1])
-                            .state(split[2])
-                            .build());
-                }
-        );
-
-        Files.lines(Path.of(inputFilesPath + "weather_data.csv")).forEach( line -> {
-            String[] split = line.split(";");
-            WeatherStationEntity byCode = weatherStationRepository.findByCode(split[6]);
-            Date date = new Date(Integer.parseInt(split[4]) - 1900, Integer.parseInt(split[2]) - 1, Integer.parseInt(split[3]));
-            weatherRepository.save(WeatherEntity.builder()
-                    .date(DateEntity.builder()
-                            .date(date)
-                            .build())
-                    .weatherStation(byCode)
-                    .temperatureAvg(Integer.parseInt(split[9]))
-                    .temperatureMin(Integer.parseInt(split[11]))
-                    .temperatureMax(Integer.parseInt(split[10]))
-                    .precipitation(Double.parseDouble(split[0]))
-                    .windDirection(Integer.parseInt(split[12]))
-                    .windSpeed(Double.parseDouble(split[13]))
-                    .build());
-        });
+//        Files.lines(Path.of(inputFilesPath + "weather_station.csv")).forEach(line -> {
+//                    String[] split = line.split(";");
+//                    weatherStationRepository.save(WeatherStationEntity.builder()
+//                            .name(split[0])
+//                            .code(split[1])
+//                            .state(split[2])
+//                            .build());
+//                }
+//        );
+//
+//        Files.lines(Path.of(inputFilesPath + "weather_data.csv")).forEach( line -> {
+//            String[] split = line.split(";");
+//            WeatherStationEntity byCode = weatherStationRepository.findByCode(split[6]);
+//            Date date = new Date(Integer.parseInt(split[4]) - 1900, Integer.parseInt(split[2]) - 1, Integer.parseInt(split[3]));
+//            weatherRepository.save(WeatherEntity.builder()
+//                    .date(DateEntity.builder()
+//                            .date(date)
+//                            .build())
+//                    .weatherStation(byCode)
+//                    .temperatureAvg(Integer.parseInt(split[9]))
+//                    .temperatureMin(Integer.parseInt(split[11]))
+//                    .temperatureMax(Integer.parseInt(split[10]))
+//                    .precipitation(Double.parseDouble(split[0]))
+//                    .windDirection(Integer.parseInt(split[12]))
+//                    .windSpeed(Double.parseDouble(split[13]))
+//                    .build());
+//        });
     }
 }
