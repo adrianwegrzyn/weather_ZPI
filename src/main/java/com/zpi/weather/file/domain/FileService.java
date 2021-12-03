@@ -53,30 +53,45 @@ public class FileService {
     private void addDataToDatabase(Path path) throws IOException {
         Files.lines(path).forEach(line -> {
             String[] split = line.split("\",");
-            for(int i = 0; i < split.length; i++) {
+            for (int i = 0; i < split.length; i++) {
                 split[i] = split[i].replace("\"", "");
             }
-            WeatherStationEntity byCode = weatherStationRepository.findByCode(split[6]);
-            if (byCode == null) {
-                byCode = weatherStationRepository.save(WeatherStationEntity.builder()
-                        .name(split[5])
-                        .code(split[6])
-                        .state(split[8])
+            WeatherStationEntity station = weatherStationRepository.findByCode(split[6]);
+            try {
+                if (station == null) {
+                    station = weatherStationRepository.save(WeatherStationEntity.builder()
+                            .name(split[5])
+                            .code(split[6])
+                            .state(split[8])
+                            .build());
+                }
+                Date date = new Date(Integer.parseInt(split[4]), Integer.parseInt(split[2]) - 1, Integer.parseInt(split[3]));
+                weatherRepository.save(WeatherEntity.builder()
+                        .date(DateEntity.builder()
+                                .date(date)
+                                .build())
+                        .weatherStation(station)
+                        .temperatureAvg(Integer.parseInt(split[9]))
+                        .temperatureMin(Integer.parseInt(split[11]))
+                        .temperatureMax(Integer.parseInt(split[10]))
+                        .precipitation(Double.parseDouble(split[0]))
+                        .windDirection(Integer.parseInt(split[12]))
+                        .windSpeed(Double.parseDouble(split[13]))
                         .build());
+
+            } catch (Exception e) {
+                try {
+                    Path file = null;
+                    if(!Files.exists(Path.of(path + ".fail"))) {
+                        file = Files.createFile(Path.of(path + ".fail"));
+                        Files.writeString(file, line);
+                    } else {
+                        Files.writeString(file, line);
+                    }
+                } catch (IOException ex) {
+                    System.out.println("Fail: " + line);
+                }
             }
-            Date date = new Date(Integer.parseInt(split[4]), Integer.parseInt(split[2]) - 1, Integer.parseInt(split[3]));
-            weatherRepository.save(WeatherEntity.builder()
-                    .date(DateEntity.builder()
-                            .date(date)
-                            .build())
-                    .weatherStation(byCode)
-                    .temperatureAvg(Integer.parseInt(split[9]))
-                    .temperatureMin(Integer.parseInt(split[11]))
-                    .temperatureMax(Integer.parseInt(split[10]))
-                    .precipitation(Double.parseDouble(split[0]))
-                    .windDirection(Integer.parseInt(split[12]))
-                    .windSpeed(Double.parseDouble(split[13]))
-                    .build());
         });
     }
 }
