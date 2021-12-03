@@ -14,25 +14,28 @@ import java.util.List;
 @RequestMapping(value = "/weather")
 public class AnalyzerController {
 
-    private final WeatherService weatherService;
+  private final WeatherService weatherService;
 
-    public AnalyzerController(WeatherService weatherService) {
-        this.weatherService = weatherService;
-    }
+  public AnalyzerController(WeatherService weatherService) {
+    this.weatherService = weatherService;
+  }
 
-    @GetMapping("/hello")
-    public String getMessage() {
-        return "hello";
-    }
+  @GetMapping("/hello")
+  public String getMessage() {
+    return "hello";
+  }
 
-    @GetMapping("/information")
-    public ResponseEntity<List<WeatherDto>> getInformationAboutWeather(@RequestParam String numberOfPage, @RequestParam String size, @RequestParam String sortBy) {
-        return ResponseEntity.ok(weatherService.getWeatherInformation(numberOfPage, size, sortBy));
-    }
-
-    @PostMapping("/information")
-    public ResponseEntity<WeatherEntity> createWeatherEntry(@RequestBody WeatherBasicDto weatherDto) {
-        WeatherEntity weatherEntry = weatherService.createWeatherEntry(weatherDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(weatherEntry);
-    }
+  @CrossOrigin(origins = "*", allowedHeaders = "*")
+  @GetMapping("/information")
+  public ResponseEntity<List<WeatherDto>> getInformationAboutWeather(@RequestParam(required = false) String numberOfPage,
+                                                                     @RequestParam(required = false) String size,
+                                                                     @RequestParam(required = false) String sortBy) {
+    return ResponseEntity.ok(weatherService.getWeatherInformation(numberOfPage, size, sortBy));
+  }
+  @CrossOrigin(origins = "*", allowedHeaders = "*")
+  @PostMapping("/information")
+  public ResponseEntity<WeatherEntity> createWeatherEntry(@RequestBody WeatherBasicDto weatherDto) {
+    WeatherEntity weatherEntry = weatherService.createWeatherEntry(weatherDto);
+    return ResponseEntity.status(HttpStatus.CREATED).body(weatherEntry);
+  }
 }

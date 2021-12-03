@@ -51,7 +51,7 @@ public class FileService {
     }
 
     private void addDataToDatabase(Path path) throws IOException {
-        Files.lines(path).forEach(line -> {
+        Files.lines(path).skip(1).forEach(line -> {
             String[] split = line.split("\",");
             for(int i = 0; i < split.length; i++) {
                 split[i] = split[i].replace("\"", "");
